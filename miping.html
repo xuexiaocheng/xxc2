@@ -5,7 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>增强版答题系统</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+
+/* ========= 安卓端与手机分辨率增强 ========= */
+(function () {
+  const ua = navigator.userAgent || '';
+  const isAndroid = /Android/i.test(ua);
+  const androidTip = document.getElementById('android-upload-tip');
+  if (androidTip && !isAndroid) {
+    androidTip.style.display = 'none';
+  }
+
+  function syncMobileViewportState() {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    document.body.classList.toggle('is-mobile-viewport', isMobile);
+  }
+
+  syncMobileViewportState();
+  window.addEventListener('resize', syncMobileViewportState, { passive: true });
+  window.addEventListener('orientationchange', syncMobileViewportState, { passive: true });
+
+  if (isAndroid) {
+    document.documentElement.style.setProperty('scroll-behavior', 'smooth');
+  }
+})();
+
+</script>
 <style>
 * {
   margin: 0;
@@ -1808,6 +1833,236 @@ h1 {
   }
 }
 
+
+
+/* ========= 安卓兼容 + 全分辨率自适应增强 ========= */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.file-upload-wrapper {
+  min-height: 52px;
+  width: min(100%, 420px);
+}
+
+#file-upload {
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: 16px;
+}
+
+.mobile-upload-tip.android-tip {
+  background: rgba(59,130,246,0.08);
+  color: #1d4ed8;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+@media (max-width: 1023px) {
+  .main-content,
+  .sidebar {
+    width: 100%;
+  }
+
+  .answer-sheet {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: calc(10px + var(--safe-top)) calc(10px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(10px + var(--safe-left));
+  }
+
+  .container {
+    padding: 0;
+  }
+
+  .advanced-features,
+  .exam-mode-container,
+  .question-type-group {
+    gap: 12px;
+  }
+
+  .quiz-controls.show {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .score-display,
+  .question-count {
+    text-align: center;
+  }
+
+  .question-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .question-type,
+  .points-badge,
+  #scoring-mode {
+    margin-left: 0;
+  }
+
+  .button-group {
+    position: sticky;
+    bottom: calc(8px + var(--safe-bottom));
+  }
+
+  .button-group .btn,
+  .confirm-btn-container .btn,
+  .results-buttons .btn,
+  .results-buttons .export-btn,
+  .results-buttons .wrong-questions-btn {
+    width: 100%;
+  }
+
+  .results-buttons {
+    gap: 12px;
+  }
+
+  .answer-sheet-grid,
+  .type-section-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .progress-labels {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .progress-label {
+    flex: 1 1 30%;
+  }
+
+  .blank-row,
+  .type-controls,
+  .exam-settings,
+  .exam-mode-toggle {
+    flex-wrap: wrap;
+  }
+
+  .type-controls input,
+  .exam-settings input,
+  .encoding-selector {
+    width: 100%;
+  }
+
+  .preview-container {
+    max-width: 96%;
+    max-height: 78dvh;
+  }
+
+  #close-preview {
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  .preview-nav {
+    gap: 18px;
+    margin-top: 18px;
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .preview-nav-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.94rem;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .question-text {
+    font-size: 1.12rem;
+    margin-bottom: 18px;
+  }
+
+  .option {
+    padding: 14px;
+  }
+
+  .option-label {
+    align-items: center;
+  }
+
+  .option-letter {
+    width: 28px;
+    height: 28px;
+    margin-right: 12px;
+    font-size: 0.95rem;
+  }
+
+  .answer-sheet-grid,
+  .type-section-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .question-image, .option-image {
+    max-height: 240px;
+  }
+
+  .file-info-content,
+  .import-status,
+  .advanced-features,
+  .exam-mode-container,
+  .shuffle-container,
+  .file-format {
+    padding: 14px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover,
+  .export-btn:hover,
+  .wrong-questions-btn:hover,
+  .card:hover,
+  .preview-btn:hover {
+    transform: none;
+  }
+
+  .option:hover {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1823,6 +2078,7 @@ h1 {
       <input id="file-upload" type="file" accept=".csv,.xls,.xlsx,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
     </div>
     <div class="mobile-upload-tip">iPhone / iPad 建议使用 Safari 打开本页面，再选择文件上传。</div>
+    <div id="android-upload-tip" class="mobile-upload-tip android-tip">安卓手机建议使用 Chrome 或 Samsung Internet 打开本页面，再上传 CSV / Excel 文件。</div>
     
     <div class="advanced-features">
       <div class="feature-item">
